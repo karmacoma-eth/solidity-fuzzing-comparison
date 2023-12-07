@@ -25,8 +25,13 @@ contract UnstoppableBasicFoundry is Test {
     function setUp() public virtual {
         // setup contracts to be tested
         token    = new TestToken(INIT_TOKENS_POOL + INIT_TOKENS_ATTACKER, 18);
+        console2.log("TestToken is", address(token));
+
         pool     = new UnstoppableLender(address(token));
+        console2.log("UnstoppableLender is", address(pool));
+
         receiver = new ReceiverUnstoppable(payable(address(pool)));
+        console2.log("ReceiverUnstoppable is", address(receiver));
 
         // transfer deposit initial tokens into pool
         token.approve(address(pool), INIT_TOKENS_POOL);
@@ -42,7 +47,7 @@ contract UnstoppableBasicFoundry is Test {
         // Foundry can occasionally break the second easier invariant
         // but never the first in basic unguided mode
     }
-    
+
     // invariant #1 very generic, harder to break
     function invariant_receiver_can_take_flash_loan() public {
         receiver.executeFlashLoan(10);
